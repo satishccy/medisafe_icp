@@ -611,12 +611,88 @@ actor {
 
   };
 
-  public shared query (msg) func patientRequests() : async {
+  
+  public shared (msg) func patientAccept(uuid : Text, status : { #Accept; #Reject }) : async {
     statusCode : Nat;
-    msg:Text;
-    
+    msg : Text;
   } {
+    if (not Principal.isAnonymous(msg.caller)) {
+      var patient = patients.get(msg.caller);
+      switch (patient) {
+        case (null) {
+          return {
+            statusCode = 403;
+            msg = "Only Patients can Access this method";
+          };
+        };
+        case (?patient) {
+          var request = requests.get(uuid);
+          switch (request) {
+            case (null) {
+              return {
+                statusCode = 400;
+                msg = "Invalid uuid was Given.";
+              };
+            };
+            case (?request) {
+              if (status == #Reject) {
+                var newRequest : Request = {
+                  patientPrincipal = request.patientPrincipal;
+                  doctorPrincipal = request.doctorPrincipal;
+                  expries = request.expries;
+                  note = request.note;
+                  status = #Reject;
+                  isEmergency = request.isEmergency;
+                  requestedOn = request.requestedOn;
+                };
+                requests.put(uuid, newRequest);
+              } else {
+                var newRequest : Request = {
+                  patientPrincipal = request.patientPrincipal;
+                  doctorPrincipal = request.doctorPrincipal;
+                  expries = Time.now() + 86400000;
+                  note = request.note;
+                  status = #Accept;
+                  isEmergency = request.isEmergency;
+                  requestedOn = request.requestedOn;
+                };
+                requests.put(uuid, newRequest);
 
+                var mapp = Array.filter<Principal>(patient.doctors, func x = x == request.doctorPrincipal);
+                var noofmapp = Array.size<Principal>(mapp);
+                var newDoctors = patient.doctors;
+                if (noofmapp == 0) {
+                  newDoctors := Array.append<Principal>(newDoctors, Array.make<Principal>(request.doctorPrincipal));
+                };
+
+                var newPatient : Patient = {
+                  name = patient.name;
+                  dob = patient.dob;
+                  gender = patient.gender;
+                  doctors = newDoctors;
+                  noofrecords = patient.noofrecords;
+                  requests = patient.requests;
+                  records = patient.records;
+                };
+                patients.put(msg.caller, newPatient);
+
+              };
+
+              return {
+                statusCode = 200;
+                msg = "Updated Request Access Successfully.";
+              };
+
+            };
+          };
+        };
+      };
+    } else {
+      return {
+        statusCode = 404;
+        msg = "Connect Wallet To Access This Function";
+      };
+    };
   };
 
   /* Stabling Users Data While Cannister Upgrade */
