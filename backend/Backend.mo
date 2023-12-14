@@ -523,7 +523,7 @@ actor {
           return {
             statusCode = 403;
             msg = "Only Doctors can Access this method";
-            data=null;
+            data = null;
           };
         };
         case (?doctor) {
@@ -543,7 +543,9 @@ actor {
                   case (?patient) {
                     var patient_name = patient.name;
                     var patient_dob = patient.dob;
-                    var access_type = if (not request.isEmergency) { "Normal" } else { "Emergency" };
+                    var access_type = if (not request.isEmergency) { "Normal" } else {
+                      "Emergency";
+                    };
                     var access_endson : ?Time.Time = null;
                     var request_access = request.status;
                     var writeable = "no";
@@ -611,7 +613,71 @@ actor {
 
   };
 
-  
+  public shared query (msg) func patientRequests() : async {
+    statusCode : Nat;
+    msg : Text;
+    data : ?[{
+      date : Time.Time;
+      doctor_name : Text;
+      note : Text;
+      access_status : Bool;
+      uuid : Text;
+    }];
+  } {
+    if (not Principal.isAnonymous(msg.caller)) {
+      var patient = patients.get(msg.caller);
+      switch (patient) {
+        case (null) {
+          return {
+            statusCode = 403;
+            msg = "Only Patients can Access this method";
+            data = null;
+          };
+        };
+        case (?patient) {
+          var req_buff = Buffer.Buffer<{ date : Time.Time; doctor_name : Text; note : Text; access_status : Bool; uuid : Text }>(Array.size<Text>(patient.requests));
+          var request_codes = Array.reverse(patient.requests);
+          label name for (uuid in request_codes.vals()) {
+            var req = requests.get(uuid);
+            switch (req) {
+              case (null) { continue name };
+              case (?req) {
+                var doct = doctors.get(req.doctorPrincipal);
+                switch (doct) {
+                  case (null) { continue name };
+                  case (?doct) {
+                    var access_status = if (req.status == #Nota) { true } else {
+                      false;
+                    };
+                    req_buff.add({
+                      date = req.requestedOn;
+                      doctor_name = doct.name;
+                      note = req.note;
+                      access_status = access_status;
+                      uuid = uuid;
+                    });
+                  };
+                };
+              };
+            };
+          };
+          return {
+            statusCode = 200;
+            msg = "Retrieved Patient Requests Successfully.";
+            data = ?Buffer.toArray(req_buff);
+          };
+        };
+      };
+    } else {
+      return {
+        statusCode = 404;
+        msg = "Connect Wallet To Access This Function";
+        data = null;
+      };
+    };
+
+  };
+
   public shared (msg) func patientAccept(uuid : Text, status : { #Accept; #Reject }) : async {
     statusCode : Nat;
     msg : Text;
