@@ -1,0 +1,161 @@
+{
+    "hints": {
+        "create()void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "account_optin(string,string,string)string": {
+            "call_config": {
+                "opt_in": "CALL"
+            }
+        },
+        "add_request_hash(string)string": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "add_access_hash(string)string": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "add_data_hash(string)string": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4IDB4NTM3NTYzNjM2NTczNzMgMHg3MjZmNmM2NSAweDE1MWY3Yzc1IDB4NTA0MTU0NDk0NTRlNTQgMHg2NDZmNjM3NDZmNzI1ZjYzNmY3NTZlNzQgMHg3MDYxNzQ2OTY1NmU3NDVmNjM2Zjc1NmU3NCAweDcyNjU2MzZmNzI2NDczNWY2OTczNzM3NTY1NjQgMHgzMCAweDU5NmY3NTIwNDM2MTZlMjc3NDIwNDE2MzYzNjU3MzczMjA1NDY4Njk3MzIwNGQ2NTc0Njg2ZjY0IDB4NDQ0ZjQzNTQ0ZjUyIDB4NDQ0ZjQyIDB4NmU2MTZkNjUgMHg3MjY1NzE3NTY1NzM3NDVmNjg2MTczNjggMHg2MTYzNjM2NTczNzM1ZjY4NjE3MzY4IDB4NjQ2MTc0NjE1ZjY4NjE3MzY4CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4NGM1YzYxYmEgLy8gImNyZWF0ZSgpdm9pZCIKPT0KYm56IG1haW5fbDEwCnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4ZmM3OGMzYjQgLy8gImFjY291bnRfb3B0aW4oc3RyaW5nLHN0cmluZyxzdHJpbmcpc3RyaW5nIgo9PQpibnogbWFpbl9sOQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDk0NTc0N2Q4IC8vICJhZGRfcmVxdWVzdF9oYXNoKHN0cmluZylzdHJpbmciCj09CmJueiBtYWluX2w4CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4NTQ2Y2RiMzAgLy8gImFkZF9hY2Nlc3NfaGFzaChzdHJpbmcpc3RyaW5nIgo9PQpibnogbWFpbl9sNwp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGNhYjM5OTA1IC8vICJhZGRfZGF0YV9oYXNoKHN0cmluZylzdHJpbmciCj09CmJueiBtYWluX2w2CmVycgptYWluX2w2Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmNhbGxzdWIgYWRkZGF0YWhhc2hfNQpzdG9yZSA2CmJ5dGVjXzMgLy8gMHgxNTFmN2M3NQpsb2FkIDYKY29uY2F0CmxvZwppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNzoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpjYWxsc3ViIGFkZGFjY2Vzc2hhc2hfNApzdG9yZSA1CmJ5dGVjXzMgLy8gMHgxNTFmN2M3NQpsb2FkIDUKY29uY2F0CmxvZwppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sODoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpjYWxsc3ViIGFkZHJlcXVlc3RoYXNoXzMKc3RvcmUgNApieXRlY18zIC8vIDB4MTUxZjdjNzUKbG9hZCA0CmNvbmNhdApsb2cKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDk6CnR4biBPbkNvbXBsZXRpb24KaW50Y18xIC8vIE9wdEluCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCnN0b3JlIDAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgpzdG9yZSAxCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKc3RvcmUgMgpsb2FkIDAKbG9hZCAxCmxvYWQgMgpjYWxsc3ViIGFjY291bnRvcHRpbl8yCnN0b3JlIDMKYnl0ZWNfMyAvLyAweDE1MWY3Yzc1CmxvYWQgMwpjb25jYXQKbG9nCmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMDoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAo9PQomJgphc3NlcnQKY2FsbHN1YiBjcmVhdGVfMQppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIHByZWZpeF9rZXlfZ2VuCnByZWZpeGtleWdlbl8wOgpwcm90byAxIDEKcHVzaGJ5dGVzIDB4NzI2NTczNjU3Mjc2NjU2NDVmNmM2ZjYzNjE2YzVmNzY2MTZjNzU2NSAvLyAicmVzZXJ2ZWRfbG9jYWxfdmFsdWUiCmZyYW1lX2RpZyAtMQpjb25jYXQKcmV0c3ViCgovLyBjcmVhdGUKY3JlYXRlXzE6CnByb3RvIDAgMApieXRlYyA1IC8vICJkb2N0b3JfY291bnQiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDYgLy8gInBhdGllbnRfY291bnQiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDcgLy8gInJlY29yZHNfaXNzdWVkIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIGFjY291bnRfb3B0aW4KYWNjb3VudG9wdGluXzI6CnByb3RvIDMgMQpieXRlY18wIC8vICIiCmZyYW1lX2RpZyAtMgpleHRyYWN0IDIgMApieXRlYyA0IC8vICJQQVRJRU5UIgo9PQpmcmFtZV9kaWcgLTIKZXh0cmFjdCAyIDAKYnl0ZWMgMTAgLy8gIkRPQ1RPUiIKPT0KfHwKYm56IGFjY291bnRvcHRpbl8yX2w1CnB1c2hieXRlcyAweDUyNmY2YzY1MjA0ZDc1NzM3NDIwNDI2NTIwNGY2ZTZjNzkyMDUwNjE3NDY5NjU2ZTc0MjA2ZjcyMjA0NDZmNjM3NDZmNzIgLy8gIlJvbGUgTXVzdCBCZSBPbmx5IFBhdGllbnQgb3IgRG9jdG9yIgpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKbGVuCml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDAKY29uY2F0CmZyYW1lX2J1cnkgMAphY2NvdW50b3B0aW5fMl9sMjoKZnJhbWVfZGlnIDAKZXh0cmFjdCAyIDAKYnl0ZWNfMSAvLyAiU3VjY2VzcyIKPT0KYm56IGFjY291bnRvcHRpbl8yX2w0CmludGNfMCAvLyAwCnJldHVybgphY2NvdW50b3B0aW5fMl9sNDoKaW50Y18xIC8vIDEKcmV0dXJuCmFjY291bnRvcHRpbl8yX2w1Ogp0eG4gU2VuZGVyCmJ5dGVjIDExIC8vICJET0IiCmJ5dGVjXzAgLy8gIiIKYXBwX2xvY2FsX3B1dAp0eG4gU2VuZGVyCmJ5dGVjIDEyIC8vICJuYW1lIgpieXRlY18wIC8vICIiCmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlY18yIC8vICJyb2xlIgpieXRlY18wIC8vICIiCmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlYyAxMiAvLyAibmFtZSIKZnJhbWVfZGlnIC0zCmV4dHJhY3QgMiAwCmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlY18yIC8vICJyb2xlIgpmcmFtZV9kaWcgLTIKZXh0cmFjdCAyIDAKYXBwX2xvY2FsX3B1dAp0eG4gU2VuZGVyCmJ5dGVjIDExIC8vICJET0IiCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAphcHBfbG9jYWxfcHV0CmZyYW1lX2RpZyAtMgpleHRyYWN0IDIgMApieXRlYyA0IC8vICJQQVRJRU5UIgo9PQpibnogYWNjb3VudG9wdGluXzJfbDgKdHhuIFNlbmRlcgpieXRlYyAxMyAvLyAicmVxdWVzdF9oYXNoIgpjYWxsc3ViIHByZWZpeGtleWdlbl8wCmJ5dGVjIDggLy8gIjAiCmFwcF9sb2NhbF9wdXQKYnl0ZWMgNSAvLyAiZG9jdG9yX2NvdW50IgpieXRlYyA1IC8vICJkb2N0b3JfY291bnQiCmFwcF9nbG9iYWxfZ2V0CmludGNfMSAvLyAxCisKYXBwX2dsb2JhbF9wdXQKYWNjb3VudG9wdGluXzJfbDc6CmJ5dGVjXzEgLy8gIlN1Y2Nlc3MiCmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApsZW4KaXRvYgpleHRyYWN0IDYgMApmcmFtZV9kaWcgMApjb25jYXQKZnJhbWVfYnVyeSAwCmIgYWNjb3VudG9wdGluXzJfbDIKYWNjb3VudG9wdGluXzJfbDg6CnR4biBTZW5kZXIKYnl0ZWMgMTQgLy8gImFjY2Vzc19oYXNoIgpjYWxsc3ViIHByZWZpeGtleWdlbl8wCmJ5dGVjIDggLy8gIjAiCmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlYyAxNSAvLyAiZGF0YV9oYXNoIgpjYWxsc3ViIHByZWZpeGtleWdlbl8wCmJ5dGVjIDggLy8gIjAiCmFwcF9sb2NhbF9wdXQKYnl0ZWMgNiAvLyAicGF0aWVudF9jb3VudCIKYnl0ZWMgNiAvLyAicGF0aWVudF9jb3VudCIKYXBwX2dsb2JhbF9nZXQKaW50Y18xIC8vIDEKKwphcHBfZ2xvYmFsX3B1dApiIGFjY291bnRvcHRpbl8yX2w3CgovLyBhZGRfcmVxdWVzdF9oYXNoCmFkZHJlcXVlc3RoYXNoXzM6CnByb3RvIDEgMQpieXRlY18wIC8vICIiCnR4biBTZW5kZXIKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbklECmFwcF9vcHRlZF9pbgovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CnR4biBTZW5kZXIKYnl0ZWNfMiAvLyAicm9sZSIKYXBwX2xvY2FsX2dldApieXRlYyAxMCAvLyAiRE9DVE9SIgo9PQpibnogYWRkcmVxdWVzdGhhc2hfM19sMgpieXRlYyA5IC8vICJZb3UgQ2FuJ3QgQWNjZXNzIFRoaXMgTWV0aG9kIgpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKbGVuCml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDAKY29uY2F0CmZyYW1lX2J1cnkgMAppbnRjXzAgLy8gMApyZXR1cm4KYWRkcmVxdWVzdGhhc2hfM19sMjoKdHhuIFNlbmRlcgpieXRlYyAxMyAvLyAicmVxdWVzdF9oYXNoIgpjYWxsc3ViIHByZWZpeGtleWdlbl8wCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAphcHBfbG9jYWxfcHV0CmJ5dGVjXzEgLy8gIlN1Y2Nlc3MiCmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApsZW4KaXRvYgpleHRyYWN0IDYgMApmcmFtZV9kaWcgMApjb25jYXQKZnJhbWVfYnVyeSAwCmludGNfMSAvLyAxCnJldHVybgoKLy8gYWRkX2FjY2Vzc19oYXNoCmFkZGFjY2Vzc2hhc2hfNDoKcHJvdG8gMSAxCmJ5dGVjXzAgLy8gIiIKdHhuIFNlbmRlcgpnbG9iYWwgQ3VycmVudEFwcGxpY2F0aW9uSUQKYXBwX29wdGVkX2luCi8vIHVuYXV0aG9yaXplZAphc3NlcnQKdHhuIFNlbmRlcgpieXRlY18yIC8vICJyb2xlIgphcHBfbG9jYWxfZ2V0CmJ5dGVjIDQgLy8gIlBBVElFTlQiCj09CmJueiBhZGRhY2Nlc3NoYXNoXzRfbDIKYnl0ZWMgOSAvLyAiWW91IENhbid0IEFjY2VzcyBUaGlzIE1ldGhvZCIKZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmxlbgppdG9iCmV4dHJhY3QgNiAwCmZyYW1lX2RpZyAwCmNvbmNhdApmcmFtZV9idXJ5IDAKaW50Y18wIC8vIDAKcmV0dXJuCmFkZGFjY2Vzc2hhc2hfNF9sMjoKdHhuIFNlbmRlcgpieXRlYyAxNCAvLyAiYWNjZXNzX2hhc2giCmNhbGxzdWIgcHJlZml4a2V5Z2VuXzAKZnJhbWVfZGlnIC0xCmV4dHJhY3QgMiAwCmFwcF9sb2NhbF9wdXQKYnl0ZWNfMSAvLyAiU3VjY2VzcyIKZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmxlbgppdG9iCmV4dHJhY3QgNiAwCmZyYW1lX2RpZyAwCmNvbmNhdApmcmFtZV9idXJ5IDAKaW50Y18xIC8vIDEKcmV0dXJuCgovLyBhZGRfZGF0YV9oYXNoCmFkZGRhdGFoYXNoXzU6CnByb3RvIDEgMQpieXRlY18wIC8vICIiCnR4biBTZW5kZXIKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbklECmFwcF9vcHRlZF9pbgovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CnR4biBTZW5kZXIKYnl0ZWNfMiAvLyAicm9sZSIKYXBwX2xvY2FsX2dldApieXRlYyA0IC8vICJQQVRJRU5UIgo9PQpibnogYWRkZGF0YWhhc2hfNV9sMgpieXRlYyA5IC8vICJZb3UgQ2FuJ3QgQWNjZXNzIFRoaXMgTWV0aG9kIgpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKbGVuCml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDAKY29uY2F0CmZyYW1lX2J1cnkgMAppbnRjXzAgLy8gMApyZXR1cm4KYWRkZGF0YWhhc2hfNV9sMjoKdHhuIFNlbmRlcgpieXRlYyAxNSAvLyAiZGF0YV9oYXNoIgpjYWxsc3ViIHByZWZpeGtleWdlbl8wCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAphcHBfbG9jYWxfcHV0CmJ5dGVjXzEgLy8gIlN1Y2Nlc3MiCmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApsZW4KaXRvYgpleHRyYWN0IDYgMApmcmFtZV9kaWcgMApjb25jYXQKZnJhbWVfYnVyeSAwCmJ5dGVjIDcgLy8gInJlY29yZHNfaXNzdWVkIgpieXRlYyA3IC8vICJyZWNvcmRzX2lzc3VlZCIKYXBwX2dsb2JhbF9nZXQKaW50Y18xIC8vIDEKKwphcHBfZ2xvYmFsX3B1dAppbnRjXzEgLy8gMQpyZXR1cm4=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDEKYnl0ZWNibG9jayAweDcyNmY2YzY1IDB4NjQ2ZjYzNzQ2ZjcyNWY2MzZmNzU2ZTc0IDB4NzA2MTc0Njk2NTZlNzQ1ZjYzNmY3NTZlNzQKY2FsbHN1YiBjc18wCmludGNfMCAvLyAxCnJldHVybgoKLy8gY3MKY3NfMDoKcHJvdG8gMCAwCnR4biBTZW5kZXIKYnl0ZWNfMCAvLyAicm9sZSIKYXBwX2xvY2FsX2dldApwdXNoYnl0ZXMgMHg1MDQxNTQ0OTQ1NGU1NCAvLyAiUEFUSUVOVCIKPT0KYm56IGNzXzBfbDMKdHhuIFNlbmRlcgpieXRlY18wIC8vICJyb2xlIgphcHBfbG9jYWxfZ2V0CnB1c2hieXRlcyAweDQ0NGY0MzU0NGY1MiAvLyAiRE9DVE9SIgo9PQpieiBjc18wX2w0CmJ5dGVjXzEgLy8gImRvY3Rvcl9jb3VudCIKYnl0ZWNfMSAvLyAiZG9jdG9yX2NvdW50IgphcHBfZ2xvYmFsX2dldAppbnRjXzAgLy8gMQotCmFwcF9nbG9iYWxfcHV0CmIgY3NfMF9sNApjc18wX2wzOgpieXRlY18yIC8vICJwYXRpZW50X2NvdW50IgpieXRlY18yIC8vICJwYXRpZW50X2NvdW50IgphcHBfZ2xvYmFsX2dldAppbnRjXzAgLy8gMQotCmFwcF9nbG9iYWxfcHV0CmNzXzBfbDQ6CnJldHN1Yg=="
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 0,
+            "num_uints": 3
+        },
+        "local": {
+            "num_byte_slices": 5,
+            "num_uints": 0
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "doctor_count": {
+                    "type": "uint64",
+                    "key": "doctor_count",
+                    "descr": "No.of Doctors Opted in MEDISAFE"
+                },
+                "patient_count": {
+                    "type": "uint64",
+                    "key": "patient_count",
+                    "descr": "No.of Patients Opted in MEDISAFE"
+                },
+                "records_issued": {
+                    "type": "uint64",
+                    "key": "records_issued",
+                    "descr": "No.of Records Issued Using MEDISAFE"
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {
+                "DOB": {
+                    "type": "bytes",
+                    "key": "DOB",
+                    "descr": "Date of Birth of the User"
+                },
+                "name": {
+                    "type": "bytes",
+                    "key": "name",
+                    "descr": "Name of the user"
+                },
+                "role": {
+                    "type": "bytes",
+                    "key": "role",
+                    "descr": "Determines the Type of User"
+                }
+            },
+            "reserved": {
+                "reserved_local_value": {
+                    "type": "bytes",
+                    "max_keys": 2,
+                    "descr": "reserved state to define seprate keys for different roles"
+                }
+            }
+        }
+    },
+    "contract": {
+        "name": "MEDISAFE",
+        "methods": [
+            {
+                "name": "create",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "account_optin",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "name"
+                    },
+                    {
+                        "type": "string",
+                        "name": "role"
+                    },
+                    {
+                        "type": "string",
+                        "name": "dob"
+                    }
+                ],
+                "returns": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "add_request_hash",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "hash"
+                    }
+                ],
+                "returns": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "add_access_hash",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "hash"
+                    }
+                ],
+                "returns": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "add_data_hash",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "hash"
+                    }
+                ],
+                "returns": {
+                    "type": "string"
+                }
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {}
+}

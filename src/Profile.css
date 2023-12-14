@@ -1,0 +1,328 @@
+/* Navbar Styles */
+
+.navbar-container {
+  position: relative;
+}
+.profile-body {
+  overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+.nav-heading{
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  color: #32d7db;
+  position: fixed;
+  width: 98vw;
+  background-color: #000;
+  z-index: 10;
+}
+
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  margin-right: 10px;
+  scale: 1.8;
+}
+
+.ps {
+  margin-top: 5%;
+}
+
+
+.hamburger {
+  padding: 15px 15px;
+  display: inline-block;
+  cursor: pointer;
+  transition-property: opacity, filter;
+  transition-duration: 0.15s;
+  transition-timing-function: linear;
+  font: inherit;
+  color: inherit;
+  text-transform: none;
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  overflow: visible; }
+  .hamburger:hover {
+    opacity: 0.7; }
+  .hamburger.is-active:hover {
+    opacity: 0.7; }
+  .hamburger.is-active .hamburger-inner,
+  .hamburger.is-active .hamburger-inner::before,
+  .hamburger.is-active .hamburger-inner::after {
+    background-color: #32d7db; }
+
+.hamburger-box {
+  width: 40px;
+  height: 24px;
+  display: inline-block;
+  position: relative; }
+
+.hamburger-inner {
+  display: block;
+  top: 50%;
+  margin-top: -2px; }
+  .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
+    width: 40px;
+    height: 4px;
+    background-color: #32d7db;
+    border-radius: 4px;
+    position: absolute;
+    transition-property: transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease; }
+  .hamburger-inner::before, .hamburger-inner::after {
+    content: "";
+    display: block; }
+  .hamburger-inner::before {
+    top: -10px; }
+  .hamburger-inner::after {
+bottom: -10px; }
+.hamburger--spring .hamburger-inner {
+top: 2px;
+transition: background-color 0s 0.13s linear; 
+}
+.hamburger--spring .hamburger-inner::before {
+  top: 10px;
+  transition: top 0.1s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+ }
+.hamburger--spring .hamburger-inner::after {
+  top: 20px;
+  transition: top 0.2s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+ }
+
+.hamburger--spring.is-active .hamburger-inner {
+transition-delay: 0.22s;
+background-color: transparent !important;
+ }
+.hamburger--spring.is-active .hamburger-inner::before {
+  top: 0;
+  transition: top 0.1s 0.15s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transform: translate3d(0, 10px, 0) rotate(45deg);
+ }
+.hamburger--spring.is-active .hamburger-inner::after {
+  top: 0;
+  transition: top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transform: translate3d(0, 10px, 0) rotate(-45deg); 
+}
+    
+
+.navbar-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+    top: 80px;
+    right: -400px;
+    height: 90%;
+    width: 200px;
+    background-color: #012727;
+    border-radius: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px;
+    transition: right 0.3s ease-in-out;
+}
+
+.dropdown-menu.open {
+  right: 0;
+}
+
+.dropdown-menu .button {
+  background: none;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  margin: 5px 0;
+  color: #fff;
+}
+
+.dropdown-menu .dropdown-box{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
+hr {
+  width: 100%;
+}
+
+.socialIcons {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.social-icons i {
+  cursor: pointer;
+  margin: 0 10px;
+  scale: 1.5;
+}
+
+ /* Profile Styles */
+.profile-section {
+
+  text-align: center;
+  color: #1CBCB0 ;
+  padding: 20px;
+  border-radius: 30px;
+  background-color: #32d7db;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  margin: 0 auto;
+  position: relative;
+  top: 15%;
+  transition: filter 0.3s;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+
+.blurred {
+  filter: blur(5px);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  padding: 9px;
+ }
+ 
+ .circle {
+  padding: 0 4px;
+ }
+ 
+ .box {
+  display: inline-block;
+  align-items: center;
+  width: 10px;
+  height: 10px;
+  padding: 1px;
+  border-radius: 50%;
+ }
+ 
+ .red {
+  background-color: #ff605c;
+ }
+ 
+ .yellow {
+  background-color: #ffbd44;
+ }
+ 
+ .green {
+  background-color: #00ca4e;
+ }
+
+.profile-pic{
+  color: #053b3b;
+  scale: 4;
+  margin-top: 100px;
+}
+
+.profile-info {
+  margin-top: 100px;  
+  color: #000;
+  margin-bottom: 70px;
+  font-size: 40px;
+}
+
+.contacts-logo img {
+  height: 30px;
+  margin-top: 10px;
+}
+
+i {
+  color: #32d7db;
+}
+
+@media screen and (max-width: 480px) {
+  .nav-heading{
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .navbar {
+    padding: 5px 10px;
+    width: 98vw;
+  }
+  .logo img {
+    height: 50px;
+    scale: 1;
+  }
+  .hamburger {
+    padding: 5px 10px;
+  }
+  
+  .hamburger-box {
+    width: 40px;
+    height: 24px;
+    display: inline-block;
+    position: relative; 
+  }
+  
+  .hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -2px; }
+    .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
+      width: 30px;
+      height: 3px;
+    }
+    .dropdown-menu {
+      top: 5%;
+        right: -400px;
+        width: 150px;
+    }
+    
+    .dropdown-menu .button {
+      font-size: 12px;
+    }
+    
+    .socialIcons {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    
+    .social-icons i {
+      cursor: pointer;
+      margin: 0 3px;
+      scale: 1;
+    }
+
+    .profile-section {
+      width: 80%;
+    }
+
+}

@@ -1,0 +1,209 @@
+.patientaccept-body {
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+.doctor-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6%;
+  }
+  
+  .center-heading {
+    text-align: center;
+  }
+
+  .tools {
+    display: flex;
+    align-items: center;
+    padding: 9px;
+   }
+   
+   .circle {
+    padding: 0 4px;
+   }
+   
+   .box {
+    display: inline-block;
+    align-items: center;
+    width: 10px;
+    height: 10px;
+    padding: 1px;
+    border-radius: 50%;
+   }
+   
+   .red {
+    background-color: #ff605c;
+   }
+   
+   .yellow {
+    background-color: #ffbd44;
+   }
+   
+   .green {
+    background-color: #00ca4e;
+   }
+.blur {
+    filter: blur(5px);
+    -webkit-filter: blur(8px);
+    -moz-filter: blur(8px);
+    -o-filter: blur(8px);
+    -ms-filter: blur(8px);
+    pointer-events: none;
+  }
+
+   .h2{
+    color: #000;
+   }
+  
+   button.file-button{
+    color: #fff;
+    background-color: #000;
+   }
+  
+  table {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  table{
+      border-collapse: collapse;
+      border-radius: 5px 5px 0 0;
+      border: 2px solid #000;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #000;
+    color: #000;
+  }
+  th {
+    color: #000;
+  }
+  
+  .table-row:hover {
+    background-color: #9de2df98;
+    cursor: pointer;
+  }
+
+
+  .tablecard{
+    width: 80%;
+    margin: 20px;
+    background-color: #32d7db;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    
+  }
+
+  .tablecard{
+    animation: appear 0.5s ease-in-out;
+  }
+  
+  .doctor-details {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+  }
+
+  input[name="uploadedAttachment"]{
+    width: auto;
+  }
+  
+  /* .left-card, .right-card {
+    width: 38%;
+    padding: 20px;
+    margin: 20px;
+    background-color: #023252;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  } */
+
+  .details{
+    padding-left: 50px;
+    color: #000;
+  }
+  
+  .left-card {
+    animation: appear 0.5s ease-in-out;
+    margin-right: 50px;
+  }
+  
+  .right-card {
+    animation: appear 0.5s ease-in-out;
+  }
+  
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .button {
+    --color: #32d7db;
+    padding: 0.8em 1.7em;
+    background-color: transparent;
+    border-radius: .3em;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    font-size: 12px;
+    border: 1px solid;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: var(--color);
+    z-index: 1;
+   }
+   
+   .button::before, .button::after {
+    content: '';
+    display: block;
+    width: 37px;
+    height: 37px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--color);
+    transition: 1s ease;
+   }
+   
+   .button::before {
+    top: -1em;
+    left: -1em;
+   }
+   
+   .button::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+   }
+   
+   .button:hover::before, .button:hover::after {
+    height: 300px;
+    width: 300px;
+   }
+   
+   .button:hover {
+    color: rgb(10, 25, 30);
+   }
+   
+   .button:active {
+    filter: brightness(.8);
+   }
+   
+   @media screen and (max-width: 480px){
+    .tablecard{
+      width: 90%;
+      overflow-x: scroll !important;
+    }
+   }

@@ -1,0 +1,4 @@
+[dependencies]
+base = "0.9.8"
+uuid = "1.0.0"
+datetime = "0.1.1"
