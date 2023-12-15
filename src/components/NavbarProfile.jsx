@@ -120,11 +120,11 @@ const NavbarProfile = () => {
 
         <nav className="navbar"> {/* Use the class name directly */}
           <div className="logo">
-            <img src="assets/logo.png" alt="Medisafe Logo" />
+            <img src="logo.png" alt="Medisafe Logo" />
             <span className='nav-heading'>MEDISAFE</span>
           </div>
           <div className="profile">
-            <img src="assets/profile.png" alt="Profile Pic" />
+            <img src="profile.png" alt="Profile Pic" />
             {/* <span>Hello, {userName}</span> */}
             <button className={hamburger_class} type="button" onClick={toggleMenu}>
               <span className="hamburger-box">

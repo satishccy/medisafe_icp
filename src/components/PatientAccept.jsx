@@ -10,6 +10,7 @@ import { Principal } from "@dfinity/principal";
 
 const PatientAccept = ({ }) => {
 
+  const [isLoading, setIsLoading] = useState(true);
   const [principal, setPrincipal] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -78,6 +79,7 @@ const PatientAccept = ({ }) => {
   useEffect(() => {
     async function sendRequest() {
       await reconnectWallet();
+      setIsLoading(false);
     }
     sendRequest();
   }, []);
@@ -95,7 +97,6 @@ const PatientAccept = ({ }) => {
   }
 
 
-  const [selectedRow, setSelectedRow] = useState(null);
   const [data, setData] = useState([]);
 
   async function ski(obj) {
@@ -155,46 +156,49 @@ const PatientAccept = ({ }) => {
       });
   }
 
-  async function handleButtonClick(index, btn_val) {
-    console.log(index, btn_val);
-    let row = data[index];
-    let access_status = btn_val;
-    let request_hash = row['request_hash'];
-
-    var response = await restapi.post('/generate_access_hash', JSON.stringify({
-      access_status: access_status,
-      request_hash: request_hash,
-    }), {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
-    var responseData = response.data
-    console.log(responseData);
-    if (responseData.statusCode === 200) {
-      console.log(responseData.obj);
-      await ski(responseData.obj)
-    }
-    else if (responseData.statusCode == 500 || responseData.statusCode == 403) {
-      alert(responseData.notify);
-    }
-    else {
-      window.location.href = "/";
+  async function handleButtonClick(index, status, uuid) {
+    console.log(index, status, uuid);
+    var authClient = await AuthClient.create();
+    const identity = await authClient.getIdentity();
+    var actor = createActor(canisterId, {
+      agentOptions: {
+        identity,
+      },
+    });
+    var resp = await actor.patientAccept(uuid, status);
+    if (resp.statusCode == BigInt(200)) {
+      alert(resp.msg) ? "" : location.reload();
+    } else if (resp.statusCode == BigInt(400)) {
+      alert(resp.msg) ? "" : location.reload();
+    } else {
+      alert(resp.msg) ? "" : location.href = "/";
     }
   }
 
   useEffect(() => {
-    console.log("useeffect");
-    // when page loads for the first time send a request to the server to get the data
     async function sendRequest() {
       try {
-        const response = await restapi.get("/get_request_log");
-        const responseData = response.data;
-        if (responseData.statusCode === 200) {
-          setData(responseData.data);
+        var authClient = await AuthClient.create();
+        const identity = await authClient.getIdentity();
+        var actor = createActor(canisterId, {
+          agentOptions: {
+            identity,
+          },
+        });
+        let resp = await actor.patientRequests();
+        console.log(resp);
+
+        if (resp.statusCode === BigInt(200)) {
+          for (var i = 0; i < resp.data[0].length; i++) {
+            resp.data[0][i].sno = i + 1;
+            resp.data[0][i].date = DateFromTimestamp(resp.data[0][i].date);
+            resp.data[0][i].status = Object.keys(resp.data[0][i].status)[0];
+            resp.data[0][i].access_given_on = DateFromTimestamp(resp.data[0][i].access_given_on);
+          }
+          setData(resp.data[0]);
         }
         else {
-          <Navigate to="/" />
+          alert(resp.msg) ? "" : window.location.href = "/";
         }
       } catch (error) {
         console.log(error);
@@ -228,16 +232,16 @@ const PatientAccept = ({ }) => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {data.map((row, index) => (
+          <tbody>{(data.length > 0) ?
+            (data.map((row, index) => (
               <tr key={index} >
                 <td>{row.sno}</td>
                 <td>{row.date}</td>
                 <td>{row.doctor_name}</td>
                 <td>{row.note}</td>
-                <td>{row.access_status == -1 ? <><button onClick={() => handleButtonClick(index, 1)} className='button1'>Accept</button><span> </span><button onClick={() => handleButtonClick(index, 0)} className='button1'>Decline</button></> : (row.access_status === 1) ? 'Access Given on ' + row.access_given_on : 'Access Declined on ' + row.access_given_on}</td>
+                <td>{row.access_status ? <><button onClick={() => handleButtonClick(index, { Accept: null }, row.uuid)} className='button1'>Accept</button><span> </span><button onClick={() => handleButtonClick(index, { Reject: null }, row.uuid)} className='button1'>Decline</button></> : (row.status === "Reject") ? 'Access Declined on ' + row.access_given_on : 'Access Given on ' + row.access_given_on}</td>
               </tr>
-            ))}
+            ))) : (<tr><td colSpan={5} style={{ textAlign: "center" }}>No Data Available</td></tr>)}
           </tbody>
         </table>
       </div>
@@ -254,7 +258,9 @@ const PatientAccept = ({ }) => {
   const blur_class = isBlurred ? 'blur' : '';
 
   return (
+    (isLoading == false) ? (
     <div className="navbar-container patientaccept-body">
+      {(!isPatient) ? (<Navigate to="/" />) : (null)}
       <nav className="navbar"> {/* Use the class name directly */}
         <div className="logo">
           <img src="logo.png" alt="Medisafe Logo" />
@@ -280,15 +286,13 @@ const PatientAccept = ({ }) => {
       <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
         <div className='dropdown-box'>
           <Link className='button' to="/patient_logs">Request Logs</Link>
-          <Link className='button' to="/patient_contacts">Contacts</Link>
           <Link className='button' to="/patient_reports">Reports</Link>
-          <Link className='button' to="/patient_add">Add Data</Link>
           <Link className='button' to="/patient_qr">QR Scan</Link>
           <a className='button' href="https://0fea70bb93826fd071.gradio.live">Chat Bot</a>
         </div>
         <div className='dropdown-box'>
           <hr />
-          <button className='button' onClick={handleDisconnectWalletClick}>Logout</button>
+          <button className='button' onClick={handleWalletClick}>Logout</button>
           <div className="social-icons">
             <i className="fab fa-facebook"></i>
             <i className="fab fa-twitter"></i>
@@ -297,6 +301,7 @@ const PatientAccept = ({ }) => {
         </div>
       </div>
     </div>
+    ) : (<div>Loading...</div>)
   );
 };
 

@@ -17,8 +17,6 @@ import UUID "mo:uuid/UUID";
 
 actor {
 
-  type List<Text> = ?(Text, List<Text>);
-
   type Gender = {
     #Male;
     #Female;
@@ -328,9 +326,9 @@ actor {
                   };
                   case (?req_ob) {
                     if (req_ob.doctorPrincipal == msg.caller) {
-                      if ((req_ob.status == #Nota or req_ob.status == #Accept) and req_ob.isEmergency) {
+                      if ((req_ob.status == #Nota or (req_ob.status == #Accept and req_ob.expries > Time.now())) and req_ob.isEmergency) {
                         is_having_emergency := true;
-                      } else if (req_ob.status == #Accept and (not req_ob.isEmergency)) {
+                      } else if ((req_ob.status == #Accept and req_ob.expries > Time.now()) and (not req_ob.isEmergency)) {
                         is_having_access := true;
                       } else if (req_ob.status == #Nota) {
                         is_pending := true;
@@ -413,9 +411,9 @@ actor {
                   };
                   case (?req_ob) {
                     if (req_ob.doctorPrincipal == msg.caller) {
-                      if ((req_ob.status == #Nota or req_ob.status == #Accept) and req_ob.isEmergency) {
+                      if ((req_ob.status == #Nota or (req_ob.status == #Accept and req_ob.expries > Time.now())) and req_ob.isEmergency) {
                         is_having_emergency := true;
-                      } else if (req_ob.status == #Accept and (not req_ob.isEmergency)) {
+                      } else if ((req_ob.status == #Accept and req_ob.expries > Time.now()) and (not req_ob.isEmergency)) {
                         is_having_access := true;
                       } else if (req_ob.status == #Nota) {
                         is_pending := true;
@@ -501,6 +499,7 @@ actor {
     statusCode : Nat;
     msg : Text;
     data : ?[{
+      request_uuid : Text;
       patient_name : Text;
       patient_dob : Text;
       access_type : Text;
@@ -527,8 +526,9 @@ actor {
           };
         };
         case (?doctor) {
-          var access_recs = Buffer.Buffer<{ patient_name : Text; patient_dob : Text; access_type : Text; access_endson : ?Time.Time; request_access : RequestStatus; writeable : Text; patient_history : ?[{ past_prescription : Text; addedby : Text; addedon : Time.Time; attachments : Blob }] }>(Array.size<Text>(doctor.requests));
-          label name for (requestUUID in doctor.requests.vals()) {
+          var access_recs = Buffer.Buffer<{ request_uuid : Text; patient_name : Text; patient_dob : Text; access_type : Text; access_endson : ?Time.Time; request_access : RequestStatus; writeable : Text; patient_history : ?[{ past_prescription : Text; addedby : Text; addedon : Time.Time; attachments : Blob }] }>(Array.size<Text>(doctor.requests));
+          var request_codes = Array.reverse(doctor.requests);
+          label name for (requestUUID in request_codes.vals()) {
             var request = requests.get(requestUUID);
             switch (request) {
               case (null) {
@@ -556,8 +556,8 @@ actor {
                       attachments : Blob;
                     }] = null;
                     if (
-                      (request.isEmergency and (request.status == #Nota or request.status == #Accept)) or
-                      (not request.isEmergency and (request.status == #Accept))
+                      (request.isEmergency and (request.status == #Nota or (request.status == #Accept and request.expries > Time.now()))) or
+                      (not request.isEmergency and request.status == #Accept and request.expries > Time.now())
                     ) {
                       writeable := "yes";
                       access_endson := ?request.expries;
@@ -580,6 +580,7 @@ actor {
                     };
 
                     access_recs.add({
+                      request_uuid = requestUUID;
                       patient_name = patient_name;
                       patient_dob = patient_dob;
                       access_type = access_type;
@@ -613,6 +614,107 @@ actor {
 
   };
 
+  public shared (msg) func addRecord(uuid : Text, prescription : Text, attachment : Blob) : async {
+    statusCode : Nat;
+    msg : Text;
+  } {
+    if (not Principal.isAnonymous(msg.caller)) {
+      var request = requests.get(uuid);
+      switch (request) {
+        case (null) {
+          return {
+            statusCode = 400;
+            msg = "Invalid Request UUID Provided.";
+          };
+        };
+        case (?request) {
+          var doctor = doctors.get(msg.caller);
+          switch (doctor) {
+            case (null) {
+              return {
+                statusCode = 403;
+                msg = "Only Doctors can Access this method";
+              };
+            };
+            case (?doctor) {
+              if (request.doctorPrincipal != msg.caller) {
+                return {
+                  statusCode = 403;
+                  msg = "Only Doctor who has initiated request can add record.";
+                };
+              } else {
+                if (request.status == #Accept and request.expries > Time.now()) {
+
+                  var record : Record = {
+                    patientPrincipal = request.patientPrincipal;
+                    doctorPrincipal = request.doctorPrincipal;
+                    addedOn = Time.now();
+                    requestUUID = uuid;
+                    prescription = prescription;
+                    attachment = attachment;
+                  };
+
+                  var patient = patients.get(request.patientPrincipal);
+                  switch (patient) {
+                    case (null) {
+                      return {
+                        statusCode = 400;
+                        msg = "Patient Account Not found to add Record.";
+                      };
+                    };
+                    case (?patient) {
+                      var recs = patient.records;
+                      var new_recs = Array.append<Record>(recs, Array.make<Record>(record));
+                      var newPatient : Patient = {
+                        name = patient.name;
+                        dob = patient.dob;
+                        gender = patient.gender;
+                        doctors = patient.doctors;
+                        noofrecords = patient.noofrecords +1;
+                        requests = patient.requests;
+                        records = new_recs;
+                      };
+                      patients.put(request.patientPrincipal, newPatient);
+
+                      var newRequest : Request = {
+                        patientPrincipal = request.patientPrincipal;
+                        doctorPrincipal = request.doctorPrincipal;
+                        expries = request.expries;
+                        note = request.note;
+                        status = #Complete;
+                        isEmergency = request.isEmergency;
+                        requestedOn = request.requestedOn;
+                      };
+                      requests.put(uuid, newRequest);
+
+                      return {
+                        statusCode = 200;
+                        msg = "Record Added Successfully.";
+                      };
+
+                    };
+                  };
+
+                } else {
+                  return {
+                    statusCode = 400;
+                    msg = "Patient is still not Authorized to add records.";
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    } else {
+      return {
+        statusCode = 404;
+        msg = "Connect Wallet To Access This Function";
+      };
+    };
+
+  };
+
   public shared query (msg) func patientRequests() : async {
     statusCode : Nat;
     msg : Text;
@@ -622,6 +724,8 @@ actor {
       note : Text;
       access_status : Bool;
       uuid : Text;
+      status : RequestStatus;
+      access_given_on : Time.Time;
     }];
   } {
     if (not Principal.isAnonymous(msg.caller)) {
@@ -635,7 +739,7 @@ actor {
           };
         };
         case (?patient) {
-          var req_buff = Buffer.Buffer<{ date : Time.Time; doctor_name : Text; note : Text; access_status : Bool; uuid : Text }>(Array.size<Text>(patient.requests));
+          var req_buff = Buffer.Buffer<{ date : Time.Time; doctor_name : Text; note : Text; access_status : Bool; uuid : Text; status : RequestStatus; access_given_on : Time.Time }>(Array.size<Text>(patient.requests));
           var request_codes = Array.reverse(patient.requests);
           label name for (uuid in request_codes.vals()) {
             var req = requests.get(uuid);
@@ -649,12 +753,19 @@ actor {
                     var access_status = if (req.status == #Nota) { true } else {
                       false;
                     };
+                    var access_given_on = if (req.status == #Reject) {
+                      req.expries;
+                    } else {
+                      req.expries - 86_400_000_000_000;
+                    };
                     req_buff.add({
                       date = req.requestedOn;
                       doctor_name = doct.name;
                       note = req.note;
                       access_status = access_status;
                       uuid = uuid;
+                      status = req.status;
+                      access_given_on = access_given_on;
                     });
                   };
                 };
@@ -701,52 +812,59 @@ actor {
               };
             };
             case (?request) {
-              if (status == #Reject) {
-                var newRequest : Request = {
-                  patientPrincipal = request.patientPrincipal;
-                  doctorPrincipal = request.doctorPrincipal;
-                  expries = request.expries;
-                  note = request.note;
-                  status = #Reject;
-                  isEmergency = request.isEmergency;
-                  requestedOn = request.requestedOn;
+              if (request.status == #Nota) {
+                if (status == #Reject) {
+                  var newRequest : Request = {
+                    patientPrincipal = request.patientPrincipal;
+                    doctorPrincipal = request.doctorPrincipal;
+                    expries = Time.now();
+                    note = request.note;
+                    status = #Reject;
+                    isEmergency = request.isEmergency;
+                    requestedOn = request.requestedOn;
+                  };
+                  requests.put(uuid, newRequest);
+                } else {
+                  var newRequest : Request = {
+                    patientPrincipal = request.patientPrincipal;
+                    doctorPrincipal = request.doctorPrincipal;
+                    expries = Time.now() + 86_400_000_000_000;
+                    note = request.note;
+                    status = #Accept;
+                    isEmergency = request.isEmergency;
+                    requestedOn = request.requestedOn;
+                  };
+                  requests.put(uuid, newRequest);
+
+                  var mapp = Array.filter<Principal>(patient.doctors, func x = x == request.doctorPrincipal);
+                  var noofmapp = Array.size<Principal>(mapp);
+                  var newDoctors = patient.doctors;
+                  if (noofmapp == 0) {
+                    newDoctors := Array.append<Principal>(newDoctors, Array.make<Principal>(request.doctorPrincipal));
+                  };
+
+                  var newPatient : Patient = {
+                    name = patient.name;
+                    dob = patient.dob;
+                    gender = patient.gender;
+                    doctors = newDoctors;
+                    noofrecords = patient.noofrecords;
+                    requests = patient.requests;
+                    records = patient.records;
+                  };
+                  patients.put(msg.caller, newPatient);
+
                 };
-                requests.put(uuid, newRequest);
+
+                return {
+                  statusCode = 200;
+                  msg = "Updated Request Access Successfully.";
+                };
               } else {
-                var newRequest : Request = {
-                  patientPrincipal = request.patientPrincipal;
-                  doctorPrincipal = request.doctorPrincipal;
-                  expries = Time.now() + 86400000;
-                  note = request.note;
-                  status = #Accept;
-                  isEmergency = request.isEmergency;
-                  requestedOn = request.requestedOn;
+                return {
+                  statusCode = 400;
+                  msg = "Status is Already Updated for this request.";
                 };
-                requests.put(uuid, newRequest);
-
-                var mapp = Array.filter<Principal>(patient.doctors, func x = x == request.doctorPrincipal);
-                var noofmapp = Array.size<Principal>(mapp);
-                var newDoctors = patient.doctors;
-                if (noofmapp == 0) {
-                  newDoctors := Array.append<Principal>(newDoctors, Array.make<Principal>(request.doctorPrincipal));
-                };
-
-                var newPatient : Patient = {
-                  name = patient.name;
-                  dob = patient.dob;
-                  gender = patient.gender;
-                  doctors = newDoctors;
-                  noofrecords = patient.noofrecords;
-                  requests = patient.requests;
-                  records = patient.records;
-                };
-                patients.put(msg.caller, newPatient);
-
-              };
-
-              return {
-                statusCode = 200;
-                msg = "Updated Request Access Successfully.";
               };
 
             };
@@ -759,6 +877,59 @@ actor {
         msg = "Connect Wallet To Access This Function";
       };
     };
+  };
+
+  public shared query (msg) func patientRecords() : async {
+    statusCode : Nat;
+    msg : Text;
+    data : ?[{
+      date : Time.Time;
+      prescription : Text;
+      attachment : Blob;
+      doctordetails : Doctor;
+    }];
+  } {
+    if (not Principal.isAnonymous(msg.caller)) {
+      var patient = patients.get(msg.caller);
+      switch (patient) {
+        case (null) {
+          return {
+            statusCode = 403;
+            msg = "Only Patients can Access this method";
+            data = null;
+          };
+        };
+        case (?patient) {
+          var recs = Buffer.Buffer<{ date : Time.Time; prescription : Text; attachment : Blob; doctordetails : Doctor }>(Array.size<Record>(patient.records));
+          label name for (record in patient.records.vals()) {
+            var doctor = doctors.get(record.doctorPrincipal);
+            switch (doctor) {
+              case (null) { continue name };
+              case (?doctor) {
+                recs.add({
+                  date = record.addedOn;
+                  prescription = record.prescription;
+                  attachment = record.attachment;
+                  doctordetails = doctor;
+                });
+              };
+            };
+          };
+          return {
+            statusCode = 200;
+            data = ?Buffer.toArray(recs);
+            msg = "Retrived Patient Records Successfully.";
+          };
+        };
+      };
+    } else {
+      return {
+        statusCode = 404;
+        data = null;
+        msg = "Connect Wallet To Access This Function";
+      };
+    };
+
   };
 
   /* Stabling Users Data While Cannister Upgrade */

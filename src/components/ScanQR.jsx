@@ -165,12 +165,17 @@ function ScanQR() {
 
     console.log(resp);
     if (resp.statusCode === 200) {
-      setRequestAccess(false);
-      setErr("Request successfully to the patient, check status of the request in patients section");
-      alert(resp.msg);
+      if (alert(resp.msg)) {
+
+      } else {
+        setErr("Request successfully to the patient, check status of the request in patients section");
+        setRequestAccess(false);
+      }
     }
-    else {
-      alert(resp.msg);
+    else if (resp.statusCode == BigInt(400)) {
+      alert(resp.msg) ? "" : window.location.reload();
+    } else {
+      alert(resp.msg) ? "" : window.location.href = "/";
     }
     btn.disabled = false;
   }
@@ -221,13 +226,9 @@ function ScanQR() {
                         identity,
                       },
                     });
-                    if (result == "http://plus.crrepa.com/app-download/dafit") {
-                      result = "7nlzr-slwah-k65ta-7zeiy-etcr5-vwopv-nadm2-jvywx-qzmqq-cujd6-lqe";
-                      // result = "25fxy-ner6t-4mnh5-dsdju-jgnid-t6zcr-jjvvg-dftid-jds2k-whxnq-gqe";
-                    }
-                    setPatient_add(result);
-                    var resp = await actor.doctorScan(result);
-                    resp.principal = result;
+                    setPatient_add(result.text);
+                    var resp = await actor.doctorScan(result.text);
+                    resp.principal = result.text;
                     console.log(resp)
 
                     if (resp.statusCode === BigInt(200)) {
@@ -342,11 +343,11 @@ function ScanQR() {
 
         <nav className="navbar"> {/* Use the class name directly */}
           <div className="logo">
-            <img src="assets/logo.png" alt="Medisafe Logo" />
+            <img src="logo.png" alt="Medisafe Logo" />
             <span className='nav-heading'>MEDISAFE</span>
           </div>
           <div className="profile">
-            <img src="assets/profile.png" alt="Profile Pic" />
+            <img src="profile.png" alt="Profile Pic" />
             {/* <span>Hello, {userName}</span> */}
             <button className={hamburger_class} type="button" onClick={toggleMenu}>
               <span className="hamburger-box">

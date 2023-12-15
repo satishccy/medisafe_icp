@@ -36,9 +36,9 @@ const AppRouter = () => {
         <Route path="/profile_qr" element={<ScanQR />} />
         <Route path="/doctor_access" element={<DoctorAccess />} />
         <Route path="/patient_logs" element={<PatientAccept />} />
-        {/*<Route path="/patient_qr" element={<PatientScanQR restapi={restapi} loggedIn={loggedIn} peraWallet={peraWallet} accountAddress={accountAddress} handleDisconnectWalletClick={handleDisconnectWalletClick} />} />
-        <Route path="/patient_add" element={<PatientAdd handleDisconnectWalletClick={handleDisconnectWalletClick} />} />
-        <Route path="/patient_reports" element={<PatientReports restapi={restapi} handleDisconnectWalletClick={handleDisconnectWalletClick} />} />
+        <Route path="/patient_reports" element={<PatientReports />} />
+        <Route path="/patient_qr" element={<PatientScanQR />} />
+        {/*<Route path="/patient_add" element={<PatientAdd handleDisconnectWalletClick={handleDisconnectWalletClick} />} />
         <Route path="/patient_contacts" element={<PatientContacts handleDisconnectWalletClick={handleDisconnectWalletClick} />} /> */}
       </Routes>
     </Router>

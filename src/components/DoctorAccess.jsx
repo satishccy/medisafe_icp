@@ -14,6 +14,8 @@ const DoctorAccess = ({ }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isDoctor, setIsDoctor] = useState(false);
   const [isPatient, setIsPatient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   var authClient;
   var actor;
 
@@ -74,23 +76,50 @@ const DoctorAccess = ({ }) => {
 
   }
 
+  const convertDataURIToBinary = dataURI =>
+    Uint8Array.from(window.atob(dataURI.replace(/^data[^,]+,/, '')), v => v.charCodeAt(0));
+
+
+  async function bufferToBase64(buffer) {
+    // use a FileReader to generate a base64 data URI:
+    const base64url = await new Promise(r => {
+      const reader = new FileReader()
+      reader.onload = () => r(reader.result)
+      reader.readAsDataURL(new Blob([buffer]))
+    });
+    // remove the `data:...;base64,` part from the start
+    return base64url.slice(base64url.indexOf(',') + 1);
+  }
+
   useEffect(() => {
     async function sendRequest() {
       await reconnectWallet();
+      setIsLoading(false);
     }
     sendRequest();
   }, []);
 
   function DateFromTimestamp(timestam) {
     const timestamp = timestam; // Replace this with your bigint timestamp
-  
+
     // Convert bigint timestamp to milliseconds
     const milliseconds = Number(timestamp);
     var myDate = new Date(milliseconds / 1000000);
     // document.write(myDate.toGMTString()+"<br>"+myDate.toLocaleString());
-  
+
     return myDate.toLocaleString();
-  
+
+  }
+
+  async function bufferToBase64(buffer) {
+    // use a FileReader to generate a base64 data URI:
+    const base64url = await new Promise(r => {
+      const reader = new FileReader()
+      reader.onload = () => r(reader.result)
+      reader.readAsDataURL(new Blob([buffer]))
+    });
+    // remove the `data:...;base64,` part from the start
+    return base64url.slice(base64url.indexOf(',') + 1);
   }
 
 
@@ -111,23 +140,35 @@ const DoctorAccess = ({ }) => {
         const resp = await actor.doctorAccess();
         console.log(resp);
         if (resp.statusCode === BigInt(200)) {
-          for(var i=0;i<resp.data[0].length;i++){
-            resp.data[0][i].sno = i+1;
+          for (var i = 0; i < resp.data[0].length; i++) {
+            resp.data[0][i].sno = i + 1;
             var re_acc = Object.keys(resp.data[0][i].request_access)[0];
-            if(re_acc=="Nota"){
+            if (re_acc == "Nota") {
               resp.data[0][i].request_access = "Pending";
-            }else if(re_acc=="Accept"){
+            } else if (re_acc == "Accept") {
               resp.data[0][i].request_access = "Accepted";
-            }else if(re_acc=="Reject"){
+            } else if (re_acc == "Reject") {
               resp.data[0][i].request_access = "Rejected";
-            }else{
+            } else {
               resp.data[0][i].request_access = "Completed";
             }
 
-            if(resp.data[0][i].access_endson.length==0){
+            if (resp.data[0][i].request_access == "Accepted" && resp.data[0][i].writeable == "no") {
+              resp.data[0][i].request_access = "Accepted & Expired";
+            }
+
+            if (resp.data[0][i].access_endson.length == 0) {
               resp.data[0][i].access_endson = "-";
-            }else{
+            } else {
               resp.data[0][i].access_endson = DateFromTimestamp(resp.data[0][i].access_endson)
+            }
+
+            if (resp.data[0][i].patient_history.length > 0) {
+              for (var j = 0; j < resp.data[0][i].patient_history[0].length; j++) {
+                resp.data[0][i].patient_history[0][j].snum = j + 1;
+                resp.data[0][i].patient_history[0][j].addedon = DateFromTimestamp(resp.data[0][i].patient_history[0][j].addedon)
+                resp.data[0][i].patient_history[0][j].attachments = await bufferToBase64(resp.data[0][i].patient_history[0][j].attachments)
+              }
             }
           }
           setData(resp.data[0]);
@@ -143,40 +184,50 @@ const DoctorAccess = ({ }) => {
 
   async function submitData() {
     if (document.getElementById("area")) {
-      let patient_add = data[selectedRow]["patient_add"];
-      let access_hash = data[selectedRow]["access_hash"];
+      let uuid = data[selectedRow].request_uuid;
       let text = document.getElementById("area").value;
       if (text.length < 1) {
         alert("Please enter some data");
         return;
       }
-      const response = await restapi.post(
-        "/send_data",
-        JSON.stringify({
-          patient_add: patient_add,
-          access_hash: access_hash,
-          data: text,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
+
+      // Get a reference to the file input
+      const fileInput = document.getElementById('uploadedAttachment');
+      console.log(fileInput.files);
+      if (fileInput.files.length == 0) {
+        alert("Please select a png image");
+        return;
+      };
+
+      let file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const uri = reader.result;
+        var authClient = await AuthClient.create();
+        const identity = await authClient.getIdentity();
+        var actor = createActor(canisterId, {
+          agentOptions: {
+            identity,
           },
+        });
+        let uuid = data[selectedRow].request_uuid;
+        let text = document.getElementById("area").value;
+        const resp = await actor.addRecord(uuid, text, convertDataURIToBinary(uri));
+        console.log(resp);
+        if (resp.statusCode == BigInt(200)) {
+          alert(resp.msg) ? "" : location.reload();
+        } else if (resp.statusCode == BigInt(400)) {
+          alert(resp.msg) ? "" : location.reload();
+        } else {
+          alert(resp.msg) ? "" : location.href = "/";
         }
-      );
-      const responseData = response.data;
-      if (responseData.statusCode === 200) {
-        alert("Data submitted successfully");
-        window.location.reload();
-      } else if (responseData.statusCode === 403) {
-        alert(responseData.notify);
-      } else {
-        alert("Some error occured");
-      }
+      };
+      reader.readAsDataURL(file);
     }
   }
 
   const handleRowClick = (index) => {
-    if (data[index].request_access === "Accepted") {
+    if (data[index].writeable === "yes") {
       setSelectedRow(index);
     }
   };
@@ -298,7 +349,7 @@ const DoctorAccess = ({ }) => {
                     cols="30"
                     rows="10"
                   ></textarea>
-                  <input name="uploadedAttachment" type="file" />
+                  <input id="uploadedAttachment" type="file" accept="image/png" />
                   <button onClick={submitData} className="button1 back-button">
                     Submit
                   </button>
@@ -335,15 +386,25 @@ const DoctorAccess = ({ }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedData.patient_history.map((row, index) => (
+                  {(selectedData.patient_history[0].length > 0) ? (selectedData.patient_history[0].map((row, index) => (
                     <tr className="table-row" key={index}>
                       <td>{row.snum}</td>
                       <td>{row.past_prescription}</td>
                       <td>{row.addedby}</td>
                       <td>{row.addedon}</td>
-                      <td>{row.attachments}</td>
-                    </tr>
-                  ))}
+                      <td>{<a className="pointer" style={{ cursor: "pointer", color: "black", textDecoration: "underline" }}
+                        onClick={() => {
+                          let data = "data:image/jpeg;base64," + row.attachments;
+
+                          let w = window.open("about:blank");
+                          let image = new Image();
+                          image.src = data;
+                          setTimeout(function () {
+                            w.document.write(image.outerHTML);
+                          }, 0)
+                        }}
+                      >View Attachment</a>}</td>
+                    </tr>))) : (<tr><td colSpan={5} style={{ textAlign: "center" }}>No Data Available</td></tr>)}
                 </tbody>
               </table>
             </div>
@@ -365,51 +426,53 @@ const DoctorAccess = ({ }) => {
   const blur_class = isBlurred ? "blur" : "";
 
   return (
-    <div className="navbar-container profile-body">
-      <nav className="navbar">
-        {" "}
-        {/* Use the class name directly */}
-        <div className="logo">
-          <img src="assets/logo.png" alt="Medisafe Logo" />
-          <span className="nav-heading">MEDISAFE</span>
+    (isLoading == false) ? (
+      <div className="navbar-container profile-body">
+        <nav className="navbar">
+          {(!isDoctor) ? (<Navigate to="/" />) : (null)}
+          {/* Use the class name directly */}
+          <div className="logo">
+            <img src="logo.png" alt="Medisafe Logo" />
+            <span className="nav-heading">MEDISAFE</span>
+          </div>
+          <div className="profile">
+            <img src="profile.png" alt="Profile Pic" />
+            {/* <span>Hello, {userName}</span> */}
+            <button class={hamburger_class} type="button" onClick={toggleMenu}>
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </button>
+          </div>
+        </nav>
+        <div className="doctor-details-container">
+          <h1 className="center-heading">Patients Dealed</h1>
+          {renderTable()}
         </div>
-        <div className="profile">
-          <img src="assets/profile.png" alt="Profile Pic" />
-          {/* <span>Hello, {userName}</span> */}
-          <button class={hamburger_class} type="button" onClick={toggleMenu}>
-            <span class="hamburger-box">
-              <span class="hamburger-inner"></span>
-            </span>
-          </button>
-        </div>
-      </nav>
-      <div className="doctor-details-container">
-        <h1 className="center-heading">Patients Dealed</h1>
-        {renderTable()}
-      </div>
 
-      <div className={`dropdown-menu ${isMenuOpen ? "open" : ""}`}>
-        <div className="dropdown-box">
-          <Link className="button" to="/doctor_access">
-            Patients dealed
-          </Link>
-          <Link className="button" to="/profile_qr">
-            QR Scan
-          </Link>
-        </div>
-        <div className="dropdown-box">
-          <hr />
-          <button className="button" onClick={handleWalletClick}>
-            Logout
-          </button>
-          <div className="social-icons">
-            <i className="fab fa-facebook"></i>
-            <i className="fab fa-twitter"></i>
-            <i className="fab fa-instagram"></i>
+        <div className={`dropdown-menu ${isMenuOpen ? "open" : ""}`}>
+          <div className="dropdown-box">
+            <Link className="button" to="/doctor_access">
+              Patients dealed
+            </Link>
+            <Link className="button" to="/profile_qr">
+              QR Scan
+            </Link>
+          </div>
+          <div className="dropdown-box">
+            <hr />
+            <button className="button" onClick={handleWalletClick}>
+              Logout
+            </button>
+            <div className="social-icons">
+              <i className="fab fa-facebook"></i>
+              <i className="fab fa-twitter"></i>
+              <i className="fab fa-instagram"></i>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    ) : (<div>Loading...</div>)
   );
 };
 

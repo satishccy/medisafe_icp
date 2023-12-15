@@ -293,7 +293,7 @@ function App({}) {
 
         <nav className="navbar">
           <div className="navbar-left">
-            <img src="assets/logo.png" alt="Logo" className="logo" />
+            <img src="logo.png" alt="Logo" className="logo" />
             <span className="navbar-text">Medisafe</span>
           </div>
           <div className="navbar-right">
@@ -333,7 +333,7 @@ function App({}) {
         {/* Second Section */}
         <div className="section">
           <div className="section-left">
-            <img src="assets/medisafe pg.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
           <div className="section-right">
             <h2 ref={refs[0]} className='abt-heading'>Unlock a New Era in Medical Care</h2>
@@ -357,14 +357,14 @@ function App({}) {
             )}
           </div>
           <div className="section-right">
-            <img src="assets/medisafe pg2.jpeg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg2.jpeg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
         </div>
 
         {/* forth Section */}
         <div className="section">
           <div className="section-left">
-            <img src="assets/medisafe pg4.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg4.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
           <div className="section-right">
             <h2 ref={refs[2]} className='abt-heading'>Trust in Authenticity</h2>
@@ -387,14 +387,14 @@ function App({}) {
             )}
           </div>
           <div className="section-right">
-            <img src="assets/medisafe pg5.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg5.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
         </div>
 
         {/* forth Section */}
         <div className="section">
           <div className="section-left">
-            <img src="assets/medisafe pg6.png" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg6.png" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
           <div className="section-right">
             <h2 ref={refs[4]} className='abt-heading'>Rapid Medical Solutions</h2>
@@ -417,14 +417,14 @@ function App({}) {
             )}
           </div>
           <div className="section-right">
-            <img src="assets/medisafe pg7.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg7.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
         </div>
 
         {/* forth Section */}
         <div className="section">
           <div className="section-left">
-            <img src="assets/medisafe pg8.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg8.jpg" alt="Images 1" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
           <div className="section-right">
             <h2 ref={refs[6]} className='abt-heading'>Seamless Appointment Management</h2>
@@ -447,7 +447,7 @@ function App({}) {
             )}
           </div>
           <div className="section-right">
-            <img src="assets/medisafe pg9.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
+            <img src="medisafe pg9.jpg" alt="Images 2" className="section-image" style={{ height: '300px', width: 'auto' }} />
           </div>
         </div>
 

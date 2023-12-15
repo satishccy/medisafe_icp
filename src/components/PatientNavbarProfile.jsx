@@ -121,12 +121,12 @@ const PatientNavbarProfile = () => {
 
         <nav className="navbar"> {/* Use the class name directly */}
           <div className="logo">
-            <img src="assets/logo.png" alt="Medisafe Logo" />
+            <img src="logo.png" alt="Medisafe Logo" />
             <span className='nav-heading'>MEDISAFE</span>
           </div>
           <div className="profile">
             <a href="/patientprofile">
-              <img src="assets/profile.png" alt="Profile Pic" />
+              <img src="profile.png" alt="Profile Pic" />
             </a>
             {/* <span>Hello, {userName}</span> */}
             <button className={hamburger_class} type="button" onClick={toggleMenu}>
@@ -148,9 +148,7 @@ const PatientNavbarProfile = () => {
         <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
           <div className='dropdown-box'>
             <Link className='button' to="/patient_logs">Request Logs</Link>
-            <Link className='button' to="/patient_contacts">Contacts</Link>
             <Link className='button' to="/patient_reports">Reports</Link>
-            <Link className='button' to="/patient_add">Add Data</Link>
             <Link className='button' to="/patient_qr">QR Scan</Link>
             <a className='button' href="https://0fea70bb93826fd071.gradio.live">Chat Bot</a>
           </div>
