@@ -304,7 +304,7 @@ const DoctorAccess = ({ }) => {
                 </div>
               </div>
               <div className="details">
-                <h2>Row Details</h2>
+                <h2 style={{color:"black"}}>Row Details</h2>
                 <p>
                   <b>SNum:</b> {selectedData.sno}
                 </p>
@@ -342,8 +342,8 @@ const DoctorAccess = ({ }) => {
               </div>
               {selectedData.writeable === "yes" ? (
                 <div className="details">
-                  <h2>Doctor Actions</h2>
-                  <a href="https://srinuksv-medicalprescriptionocr.hf.space" target="__blank">Prescription Image to Text</a>
+                  <h2 style={{color:"black"}}>Doctor Actions</h2>
+                  <a style={{ marginBlock: "15px", color: "black", display: "block", textDecoration: "underline" }} href="https://srinuksv-medicalprescriptionocr.hf.space" target="__blank">Prescription Image to Text</a>
                   <textarea
                     name="data"
                     id="area"
