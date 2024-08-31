@@ -343,6 +343,7 @@ const DoctorAccess = ({ }) => {
               {selectedData.writeable === "yes" ? (
                 <div className="details">
                   <h2>Doctor Actions</h2>
+                  <a href="https://srinuksv-medicalprescriptionocr.hf.space" target="__blank">Prescription Image to Text</a>
                   <textarea
                     name="data"
                     id="area"
